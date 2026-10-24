@@ -3,6 +3,8 @@
 
 #include "FirstPersonProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/Character.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -45,13 +47,21 @@ AFirstPersonProjectile::AFirstPersonProjectile()
 void AFirstPersonProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (AActor* ProjectileOwner = GetOwner())
 	{
 		CollisionComponent->IgnoreActorWhenMoving(
 			ProjectileOwner,
 			true
 		);
+
+		if (ACharacter* Character = Cast<ACharacter>(ProjectileOwner))
+		{
+			Character->GetCapsuleComponent()->IgnoreActorWhenMoving(
+				this,
+				true
+			);
+		}
 	}
 }
 
