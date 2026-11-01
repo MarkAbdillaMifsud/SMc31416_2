@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile | Physics")
 	float PhysicsForce = 100.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile | Damage")
+	float ProjectileDamage = 20.0f;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

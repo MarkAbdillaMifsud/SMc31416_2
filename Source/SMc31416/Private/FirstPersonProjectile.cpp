@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFirstPersonProjectile::AFirstPersonProjectile()
@@ -74,6 +75,23 @@ void AFirstPersonProjectile::Tick(float DeltaTime)
 
 void AFirstPersonProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (OtherActor &&
+		OtherActor != this &&
+		OtherActor != GetOwner() &&
+		Cast<ACharacter>(OtherActor))
+	{
+		UGameplayStatics::ApplyDamage(
+			OtherActor,
+			ProjectileDamage,
+			GetInstigatorController(),
+			this,
+			UDamageType::StaticClass()
+		);
+
+		Destroy();
+		return;
+	}
+
 	if (FVector::DotProduct(Hit.ImpactNormal, FVector::UpVector) > 0.7f)
 	{
 		FRotator Flat = GetActorRotation();
